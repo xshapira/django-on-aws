@@ -43,7 +43,6 @@ class TestViewContactUs:
 
     @pytest.mark.integration
     @pytest.mark.parametrize("sns_topic_arn", ["mock_sns_topic_arn", ""])
-    # pylint: disable=no-self-use
     def test_post_valid_form(
         self, monkeypatch, client, mock_contact_form: ContactForm, sns_topic_arn: str
     ):
@@ -56,13 +55,13 @@ class TestViewContactUs:
         monkeypatch.setattr("boto3.client", mock_sns_client := Mock())
         # When: POST request on the contact-us page
         response = client.post(reverse("contact_us"), data=mock_contact_form.json())
+        assert response.status_code == HTTPStatus.OK.value
         if sns_topic_arn:
             # Given: SNS_TOPIC_ARN is set
             # Then: `go-back-home` template is rendered
             assert TemplateNames.GO_BACK_HOME.value in [
                 t.name for t in response.templates
             ]
-            assert response.status_code == HTTPStatus.OK.value
             # Then: SNS client called with expected parameters
             mock_sns_client("sns").publish.assert_called_once_with(
                 TargetArn="mock_sns_topic_arn",
@@ -74,7 +73,6 @@ class TestViewContactUs:
             assert TemplateNames.CONTACT_US.value in [
                 t.name for t in response.templates
             ]
-            assert response.status_code == HTTPStatus.OK.value
 
     @pytest.mark.integration
     # pylint: disable=no-self-use

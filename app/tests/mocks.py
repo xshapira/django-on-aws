@@ -84,9 +84,7 @@ class MockCategory:
             ),
         }
 
-        dummy_category = Category.create(category_data)
-
-        return dummy_category
+        return Category.create(category_data)
 
     @staticmethod
     def default_categories(categories_count: int, **kwargs) -> List[Category]:
@@ -103,12 +101,11 @@ class MockCategory:
         """
 
         category_ids = [MockCategory.DEFAULT_ID + i for i in range(categories_count)]
-        default_categories = [
+        return [
             MockCategory.default_category(_id, **kwargs)
             for _id in category_ids
             if _id > 0
         ]
-        return default_categories
 
 
 class MockItem:
@@ -156,9 +153,7 @@ class MockItem:
             "category_name": parent_category,
         }
 
-        dummy_item = Item.create(item_data)
-
-        return dummy_item
+        return Item.create(item_data)
 
     @staticmethod
     def default_items(
@@ -167,11 +162,9 @@ class MockItem:
         """Generates a list of default items"""
 
         item_ids = [MockItem.DEFAULT_ID + i for i in range(items_count)]
-        default_items = list(
+        return list(
             map(
                 lambda _id: MockItem.default_item(parent_category, _id, **kwargs),
                 item_ids,
             )
         )
-
-        return default_items

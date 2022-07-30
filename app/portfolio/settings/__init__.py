@@ -3,6 +3,7 @@ This module defines additional Django configurations and can be used
 to override settings from setting/base.py.
 """
 
+
 from .base import *
 
 
@@ -46,7 +47,6 @@ if not config.STATICFILES_BUCKET:
     STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
     MEDIA_URL = config.MEDIA_FILES_PATH
     MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 else:
     print(f"Using S3 Bucket {config.STATICFILES_BUCKET} to serve static files")
     # Extra variables for AWS
@@ -60,4 +60,5 @@ else:
     STATICFILES_STORAGE = "main.storage_backends.StaticStorage"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{config.MEDIA_FILES_PATH}/"
     DEFAULT_FILE_STORAGE = "main.storage_backends.PublicMediaStorage"
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
